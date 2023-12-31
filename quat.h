@@ -273,4 +273,3 @@ static inline float quat_frobenius_distance(quat q, quat p)
     // Compute the sin of the half angle
     return sinf(halfangle);
 }
-

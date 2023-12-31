@@ -89,12 +89,11 @@ static inline quat quat_average_basic(const slice1d<quat> rotations, const slice
         if (quat_dot(accum, rotations(i)) < 0.0f)
         {
             // Add opposite-hemisphere version of the quaternion
-            // divided by the number of quaternions
             accum = accum - weights(i) * rotations(i);
         }
         else
         {
-            // Add the quaternion divided by the number of quaternions
+            // Add the quaternion
             accum = accum + weights(i) * rotations(i);
         }
     }
@@ -158,10 +157,10 @@ int main(void)
 {
     // Init Window
     
-    //const int screen_width = 1280;
-    //const int screen_height = 720;
-    const int screen_width = 640;
-    const int screen_height = 480;
+    const int screen_width = 1280;
+    const int screen_height = 720;
+    // const int screen_width = 640;
+    // const int screen_height = 480;
     
     SetConfigFlags(FLAG_VSYNC_HINT);
     SetConfigFlags(FLAG_MSAA_4X_HINT);
@@ -413,6 +412,14 @@ int main(void)
             0.0f, 1.0f);  
 
         duck_rotations(duck_selected) = quat_from_scaled_angle_axis(duck_angle_axis_rotations(duck_selected));
+
+        float err_total = 0.0f;
+        for (int i = 0; i < duck_rotation_num; i++)
+        {
+            err_total += duck_weights(i) * squaref(quat_frobenius_distance(duck_rotation, duck_rotations(i)));
+        }
+        
+        GuiLabel((Rectangle){ 10, 10, 200, 20 }, TextFormat("Sum Squared Sin Half-Angle: %6.4f", err_total));
 
         EndDrawing();
     };
