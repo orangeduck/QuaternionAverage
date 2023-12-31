@@ -1,6 +1,6 @@
-# Ranges, Tags, and Masks
+# Quaternion Average
 
-This repo contains the source code for the demo from [this article](https://theorangeduck.com/page/tags-ranges-masks).
+This repo contains the source code for the demo from [this article](https://theorangeduck.com/page/quaternion-weighted-average).
 
 # Installation
 
