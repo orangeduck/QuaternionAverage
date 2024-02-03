@@ -6,6 +6,9 @@
 
 //--------------------------------------
 
+template<typename T> struct array1d;
+template<typename T> struct array2d;
+
 // Basic type representing a pointer to some
 // data and the size of the data. `__restrict__`
 // here is used to indicate the data should not
@@ -19,6 +22,9 @@ struct slice1d
     T* __restrict__ data;
     
     slice1d(int _size, T* _data) : size(_size), data(_data) {}
+    
+    slice1d& operator=(const slice1d<T>& rhs) { assert(rhs.size == size); memcpy(data, rhs.data, rhs.size * sizeof(T)); return *this; };
+    slice1d& operator=(const array1d<T>& rhs) { assert(rhs.size == size); memcpy(data, rhs.data, rhs.size * sizeof(T)); return *this; };
     
     void zero() { memset((char*)data, 0, sizeof(T) * size); }
     void set(const T& x) { for (int i = 0; i < size; i++) { data[i] = x; } }
@@ -34,6 +40,9 @@ struct slice2d
     T* __restrict__ data;
     
     slice2d(int _rows, int _cols, T* _data) : rows(_rows), cols(_cols), data(_data) {}
+
+    slice2d& operator=(const array2d<T>& rhs) { assert(rhs.rows == rows); assert(rhs.cols == cols); memcpy(data, rhs.data, rhs.rows * rhs.cols * sizeof(T)); return *this; };
+    slice2d& operator=(const slice2d<T>& rhs) { assert(rhs.rows == rows); assert(rhs.cols == cols); memcpy(data, rhs.data, rhs.rows * rhs.cols * sizeof(T)); return *this; };
 
     void zero() { memset((char*)data, 0, sizeof(T) * rows * cols); }
     void set(const T& x) { for (int i = 0; i < rows * cols; i++) { data[i] = x; } }
