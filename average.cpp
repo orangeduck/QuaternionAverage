@@ -182,7 +182,7 @@ static inline quat quat_average_accurate(const slice1d<quat> rotations, const sl
     
     // Compute first eigen vector
     vec4 u = mat4_svd_dominant_eigen(accum, guess, 64, 1e-8f);
-    vec4 v = normalize(mat4_transpose_mul_vec4(accum, u));
+    vec4 v = normalize(mat4_mul_vec4(accum, u));
     
     // Average quaternion is first eigen vector
     return quat_abs(quat(v.x, v.y, v.z, v.w));
@@ -238,7 +238,7 @@ void bone_rotations_weighted_average(
     {
         vec4 guess = vec4(1, 0, 0, 0);
         vec4 u = mat4_svd_dominant_eigen(accum_rotations(j), guess, 64, 1e-8f);
-        vec4 v = normalize(mat4_transpose_mul_vec4(accum_rotations(j), u));
+        vec4 v = normalize(mat4_mul_vec4(accum_rotations(j), u));
         
         blended_rotations(j) = quat_abs(quat(v.x, v.y, v.z, v.w));
     }
@@ -275,7 +275,7 @@ void bone_rotations_weighted_average_ref(
     {
         vec4 guess = vec4(1, 0, 0, 0);
         vec4 u = mat4_svd_dominant_eigen(accum_rotations(j), guess, 64, 1e-8f);
-        vec4 v = normalize(mat4_transpose_mul_vec4(accum_rotations(j), u));
+        vec4 v = normalize(mat4_mul_vec4(accum_rotations(j), u));
         
         blended_rotations(j) = quat_abs(quat_mul(reference_rotations(j), quat(v.x, v.y, v.z, v.w)));
     }
